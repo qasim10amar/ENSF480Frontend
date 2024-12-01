@@ -31,25 +31,37 @@ const Checkout = () => {
       }
     }
   }, []);
-
+  
+  // Sync `createdTickets` with `localStorage`
+  useEffect(() => {
+    if (createdTickets.length > 0) {
+      localStorage.setItem('createdTickets', JSON.stringify(createdTickets));
+    }
+  }, [createdTickets]);
+  
   const handleConfirmPurchase = async () => {
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setErrorMessage('Please provide a valid email.');
       return;
     }
-
+  
     try {
-      const response = await fetch(`http://localhost:8080/api/movie/${showTimeId}/createTickets?userEmail=${email}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(seats.map((seat) => seat.seatID)),
-      });
-
+      const response = await fetch(
+        `http://localhost:8080/api/movie/${showTimeId}/createTickets?userEmail=${email}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(seats.map((seat) => seat.seatID)),
+        }
+      );
+  
       if (response.ok) {
         const data = await response.json(); // Assume this returns the created ticket IDs
-        setCreatedTickets(data.map((ticket: { id: number }) => ticket.id));
+        setCreatedTickets(
+          data.map((ticket: { ticketId: string }) => ticket.ticketId)
+        );
         setSuccessMessage('Tickets successfully created!');
         localStorage.removeItem('selectedSeats');
         router.push('/checkout/payment'); // Redirect to payment page
