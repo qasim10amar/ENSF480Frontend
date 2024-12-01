@@ -4,6 +4,7 @@ export type Seat = {
     seatColumn: number;
     seatPrice: number;
     isReserved: boolean;
+    seatNumber: string;
   };
   
 

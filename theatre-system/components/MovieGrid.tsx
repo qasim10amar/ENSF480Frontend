@@ -4,7 +4,7 @@ import { Movie, ShowTime } from '@/types';
 type MovieGridProps = {
   movies: Movie[];
   selectedDate: string;
-  onShowtimeClick: (showTime: ShowTime) => void;
+  onShowtimeClick: (showTime: ShowTime, movie: Movie) => void;
   getSelectedDateShowtimes: (showTimes: ShowTime[], date: string) => ShowTime[];
 };
 
@@ -13,7 +13,7 @@ const MovieGrid = ({ movies, selectedDate, onShowtimeClick, getSelectedDateShowt
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
       {movies.map((movie) => {
         const todayShowtimes = getSelectedDateShowtimes(movie.showTimes, selectedDate);
-
+        
         return (
           <div
             key={movie.movieId}
@@ -33,7 +33,7 @@ const MovieGrid = ({ movies, selectedDate, onShowtimeClick, getSelectedDateShowt
                   <button
                     key={showTime.showTimeId}
                     className="bg-blue-500 text-white px-3 py-1 rounded mt-2 mr-2"
-                    onClick={() => onShowtimeClick(showTime)}
+                    onClick={() => onShowtimeClick(showTime, movie)}
                   >
                     {new Date(showTime.showTime).toLocaleTimeString([], {
                       hour: '2-digit',

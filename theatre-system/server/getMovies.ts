@@ -7,7 +7,6 @@ export const getMovies = async (date: string): Promise<Movie[]> => {
       throw new Error(`Failed to fetch movies: ${response.statusText}`);
     }
     const movies: Movie[] = await response.json();
-    console.log('Fetched movies:', movies);
     return movies;
   } catch (error) {
     console.error('Error fetching movies:', error);

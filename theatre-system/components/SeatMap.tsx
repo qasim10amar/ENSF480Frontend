@@ -24,8 +24,8 @@ const SeatMap = ({ showTimeId, initialSeats, onBack }: SeatMapProps) => {
   };
 
   const handleCheckout = () => {
-    const seatIds = selectedSeats.map((seat) => seat.seatID).join(',');
-    router.push(`/checkout/checkout?seatIds=${seatIds}&showTimeId=${showTimeId}`);
+    localStorage.setItem('selectedSeats', JSON.stringify(selectedSeats));
+    router.push(`/checkout?showTimeId=${showTimeId}`);
   };
 
   const totalRows = Math.max(...seats.map((seat) => seat.seatRow));

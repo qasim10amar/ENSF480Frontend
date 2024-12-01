@@ -18,7 +18,6 @@ const Home = ({ movies, initialDate }: HomeProps) => {
   const [filteredMovies, setFilteredMovies] = useState(movies);
   const [selectedDate, setSelectedDate] = useState(initialDate);
   const router = useRouter();
-
   useEffect(() => {
     setFilteredMovies(
       movies.filter((movie) =>
@@ -27,7 +26,9 @@ const Home = ({ movies, initialDate }: HomeProps) => {
     );
   }, [searchQuery, movies]);
 
-  const handleShowtimeClick = (showTime: ShowTime) => {
+  const handleShowtimeClick = (showTime: ShowTime, movie: Movie) => {
+    localStorage.setItem('selectedMovie', JSON.stringify(movie));
+    localStorage.setItem('SelectedShowtime', JSON.stringify(showTime))
     router.push(`/seats/${showTime.showTimeId}`);
   };
 
@@ -55,10 +56,7 @@ const Home = ({ movies, initialDate }: HomeProps) => {
 export const getServerSideProps: GetServerSideProps = async () => {
   const today = new Date();
   const date = today.toISOString().split('T')[0];
-  console.log(date)
-
   const movies = await getMovies(date);
-
   return { props: { movies, initialDate: date } };
 };
 
